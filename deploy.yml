@@ -1,0 +1,91 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_folder_name:
+        description: 'Enter a deployment_folder_name'     
+        required: true
+      Env_Name:
+        description: 'Enter ENV Name'     
+        required: true 
+      Action_Name:
+        description: 'Enter Action Name'     
+        required: true    
+        
+jobs:
+  build:
+    name: "Deploy"
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Read json file
+        run: |
+          cd /home/runner/work/aiid205223_Boomi_CICD/aiid205223_Boomi_CICD/${{ github.event.inputs.deployment_folder_name }}/${{ github.event.inputs.Env_Name }}/${{ github.event.inputs.Action_Name }}/
+          ls
+          echo "The input was ${{ github.event.inputs.deployment_folder_name }}"
+          cat DeploymentId_List.json
+          pckg+=$(jq -r '.[].DeploymentId' DeploymentId_List.json)
+          echo $pckg
+          for i in $pckg; do
+            echo "Value: https://api.boomi.com/api/rest/v1/thomsonreuterscorp-KI9H39/DeployedPackage/$i"
+            curl --location --request POST \
+             --header "Authorization: Basic ${{ secrets.AUTH_SECRET }}" \
+             --header 'Accept: application/json' \
+             -H "Content-Type: application/json" \
+             --data '{"environmentId": "31e073a7-38f1-4cd6-b5e1-88e5bf28ea24", "packageId": "$i", "notes": "Package deployment via api request"}' \
+             ${{ vars.BOOMI_API_URL }}/DeployedPackage
+             # value+=$(echo "$pckg_result" | grep '<deploymentId>' | cut -d'>' -f2 | cut -d'<' -f1)
+             # echo value
+            done
+
+      - name: Validating packages
+        run: |
+         cd /home/runner/work/aiid205223_Boomi_CICD/aiid205223_Boomi_CICD/${{ github.event.inputs.deployment_folder_name }}/${{ github.event.inputs.Env_Name }}/${{ github.event.inputs.Action_Name }}/
+          cat DeploymentId_List.json
+          error_msg="Unable to find a deployment with the specified deployment ID in the specified account"
+          pckg+=$(jq -r '.[].DeploymentId' DeploymentId_List.json)
+          echo $pckg
+          count=$(grep '"DeploymentId":' DeploymentId_List.json | wc -l)
+          echo "Count of 'key_name': $count"
+          echo "PCKG_COUNT=$(echo ${count})" >> $GITHUB_ENV
+          for i in $pckg; do
+            echo "Value: https://api.boomi.com/api/rest/v1/thomsonreuterscorp-KI9H39/DeployedPackage/$i"
+            pckg_result=$(curl -s -o /dev/null -w "%{http_code}\n" --location --request POST \
+             --header "Authorization: Basic ${{ secrets.AUTH_SECRET }}" \
+             --header 'Accept: application/json' \
+             -H "Content-Type: application/json" \
+             --data '{"environmentId": "31e073a7-38f1-4cd6-b5e1-88e5bf28ea24", "packageId": "$i", "notes": "Package deployment via api request"}' \
+             ${{ vars.BOOMI_API_URL }}/DeployedPackage)
+             echo $pckg_result
+             if [ $pckg_result -eq 200 ]; then
+              echo "packageid: $i  exist"
+            else
+              echo "packageid: $i does not  exist"
+              PCKGID_NOT_IN_BOOMIENV+=($i)
+              echo "${PCKGID_NOT_IN_BOOMIENV[@]}"
+             echo "PCKGID_NOT_IN_BOOMIENV=$(echo ${PCKGID_NOT_IN_BOOMIENV[@]})" >> $GITHUB_ENV
+            fi  
+            done  
+
+      - name: Set environment variable
+        run: |
+          echo "ENV=$(echo ${{ github.event.inputs.Env_Name }})" >> $GITHUB_ENV 
+          echo "ACTION=$(echo ${{ github.event.inputs.Action_Name }})"  >> $GITHUB_ENV
+          echo "DEPLOYMENT_FOLDER=$(echo ${{ github.event.inputs.deployment_folder_name }})"  >> $GITHUB_ENV
+          echo "LOG_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+
+      - name: getting the package Count
+        run: | 
+             echo $PCKG_COUNT
+             echo $ACTION
+
+      - name: Run Python scrpt
+        run: | 
+             pip install tabulate
+             python send_email.py 
+             echo $PCKG_COUNT
+             echo $ACTION
+        env:
+         SPARKPOST_SMTP_PASSWORD: ${{ secrets.SPARKPOST_SMTP_PASSWORD }}      
