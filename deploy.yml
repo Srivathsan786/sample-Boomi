@@ -1,3 +1,4 @@
+https://api.boomi.com/api/rest/v1/thomsonreuters-AWQVQI/EnvironmentExtensions/update
 name: Deploy
 
 on:
