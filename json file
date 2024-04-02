@@ -1,0 +1,67 @@
+{
+	"@type": "EnvironmentExtensions",
+    "processProperties": {
+        "@type": "OverrideProcessProperties",
+        "ProcessProperty": [
+            {
+                "@type": "OverrideProcessProperty",
+                "ProcessPropertyValue": [
+                    {
+                        "@type": "ProcessPropertyValue",
+                        "key": "20eae6e4-57f4-47c8-b861-bf60ee85621c",
+                        "value": "Partialupdates6"
+                    },
+                    {
+                        "@type": "ProcessPropertyValue",
+                        "key": "20eae6e4-57f4-47c8-b861-bf60ee85621c",
+                        "value": "Partialupdates7"
+                    },
+                    {
+                        "@type": "ProcessPropertyValue",
+                        "key": "20eae6e4-57f4-47c8-b861-bf60ee85621c",
+                        "value": "Partialupdates8"
+                    }
+                ],
+                "id": "5da53fa0-5e19-40df-99f7-5a54f2148c90",
+                "name": "JWT OLC CREATE"
+            }
+        ]
+    },
+    "connections": {
+        "@type": "Connections",
+        "connection": [
+            {
+                "@type": "Connection",
+                "field": [
+                    {
+                        "@type": "Field",
+                        "id": "url",
+                        "encryptedValueSet": false,
+                        "usesEncryption": false,
+                        "value": "${MYGIT_VARIABLE_SAMPLE}"
+                    },
+                    {
+                        "@type": "Field",
+                        "id": "password",
+                        "encryptedValueSet": false,
+                        "usesEncryption": false,
+                        "value": "${GIT_SECRET}"
+                    }
+                ],
+                "id": "903fbe2f-3e17-437a-9d3f-653f879b8a37",
+                "name": "Proview_Instance_Connection_QA_COMMON"
+            }
+        ]
+    },
+    "properties": {
+        "property": [
+            {
+                "@type": "",
+                "name": "DPP_Sample",
+                "value": "Hello"
+            }
+        ]
+    },
+	"environmentId": "31e073a7-38f1-4cd6-b5e1-88e5bf28ea24",
+    "partial": true
+}
