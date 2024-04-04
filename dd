@@ -1,0 +1,29 @@
+name: UpdateExtensions
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: "UpdateExtensions"
+    runs-on: ubuntu-20.04
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Read json file
+        run: |
+            cd /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/
+	        ls
+	  - name: List files
+	    run: |
+          for file in $(find . -type f); do
+            echo "Found file: $file"
+            cat Packaged_Component.json
+            pckg+=$(jq -r '.[].packagedComponentId' Packaged_Component.json)
+            echo $pckg
+          for i in $pckg; do
+            echo "Value: https://api.boomi.com/api/rest/v1/thomsonreuterscorp-KI9H39/DeployedPackage/$i"
+            curl --location --request POST \
+             --header "Authorization: Basic ${{ secrets.AUTH_SECRET }}" \
+             -H "Content-Type: application/json" \
+             https://api.boomi.com/api/rest/v1/thomsonreuters-AWQVQI/EnvironmentExtensions/update
+             done
