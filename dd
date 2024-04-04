@@ -27,3 +27,18 @@ jobs:
              -H "Content-Type: application/json" \
              https://api.boomi.com/api/rest/v1/thomsonreuters-AWQVQI/EnvironmentExtensions/update
              done
+
+name: List Files
+
+on: [push]  # Run on push events (you can change this trigger)
+
+jobs:
+  list-files:
+    runs-on: ubuntu-latest  # You can choose a different runner OS
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: List files in a directory
+        run: |
+          cd path/to/your/directory  # Replace with the actual path to your directory
+          ls -l  # Use ls -l to get detailed listing (optional)
