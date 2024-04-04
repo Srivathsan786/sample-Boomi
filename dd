@@ -49,3 +49,6 @@ file_array=()
           done
           echo "Filenames in an array:"
           echo "${file_array[@]}"
+
+
+| cut -d '.' -f 1
