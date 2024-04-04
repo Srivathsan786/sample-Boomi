@@ -42,3 +42,10 @@ jobs:
         run: |
           cd path/to/your/directory  # Replace with the actual path to your directory
           ls -l  # Use ls -l to get detailed listing (optional)
+
+file_array=()
+          for file in $(find . -type f); do
+            file_array+=("$file")
+          done
+          echo "Filenames in an array:"
+          echo "${file_array[@]}"
