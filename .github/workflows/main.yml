@@ -41,3 +41,21 @@ jobs:
                 https://api.boomi.com/api/rest/v1/thomsonreuters-AWQVQI/EnvironmentExtensions/update
             done
           done
+
+          # Comparison with another folder named 'deploy'
+          cd /path/to/another/deploy/folder
+          for file in $(find . -type f); do
+            echo "Found file in another deploy folder: $file"
+            found=false
+            for f in "${file_array[@]}"; do
+              if [[ "$f" == "$(basename "$file" .*)" ]]; then
+                found=true
+                break
+              fi
+            done
+            if [[ "$found" == false ]]; then
+              echo "File not found in UpdateExtensions directory: $(basename "$file")"
+              continue
+            fi
+            # Additional processing if needed
+          done
