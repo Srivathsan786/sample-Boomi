@@ -52,3 +52,14 @@ file_array=()
 
 
 | cut -d '.' -f 1
+
+found=false
+for f in "$[file_array[@]}"; do
+  if [[ "$f" == "$file" ]]; then
+    found=true
+    break
+  fi
+done
+if [["$found" == false ]]; then
+  continue
+fi
