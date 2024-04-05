@@ -63,3 +63,49 @@ done
 if [["$found" == false ]]; then
   continue
 fi
+
+
+name: List Files
+
+on: [push]  
+
+jobs:
+  list-files:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: List files in a directory
+        run: |
+          cd /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/
+          file_array=()
+          for file in $(ls | cut -d '.' -f 1); do
+            file_array+=("$file")
+          done
+          echo "Filenames in an array:"
+          echo "${file_array[@]}"
+          cd /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/PROD/Deploy/
+          for file in $(find . -type f); do
+            echo "Found file: $file"
+            found=false
+            for f in "${file_array[@]}"; do
+              if [[ "$f" == "$file" ]]; then
+                found=true
+              fi
+            done
+            if [["$found" == false ]]; then
+              continue
+            fi
+            pckg+=$(jq -r '.[].packagedComponentId' Packaged_Component.json)
+            echo $pckg
+            for i in $pckg; do
+              echo "Value: https://api.boomi.com/api/rest/v1/thomsonreuterscorp-KI9H39/DeployedPackage/$i"
+              curl --location --request POST \
+                --header "Authorization: Basic ${{ secrets.AUTH_SECRET }}" \
+                -H "Content-Type: application/json" \
+                https://api.boomi.com/api/rest/v1/thomsonreuters-AWQVQI/EnvironmentExtensions/update
+            done
+          done
+          
+          
+          
