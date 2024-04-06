@@ -106,6 +106,14 @@ jobs:
                 https://api.boomi.com/api/rest/v1/thomsonreuters-AWQVQI/EnvironmentExtensions/update
             done
           done
+
+
+json=$(cat data.json)
+
+for item in $(echo "${json}" | jq -r '.[]'); do
+    name=$(echo "${item}" | jq -r '.name')
+    echo "Name: $name"
+done
           
           
           
