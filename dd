@@ -142,3 +142,27 @@ done
 		"testPackageId": "GetPaymentService_Collection1.0"
 	}
 ]          
+
+#!/bin/bash
+my_array=(32fsdfda-57f4-47c8-b861-bf60ee85621c 765hfgg-57f4-47c8-b861-bf60ee85621c 09678cvb-57f4-47c8-b861-bf60ee85621c)
+#readarray -t pack_array < <(jq -r '.[].packagedComponentId' /c/Users/selva/Downloads/data.json)
+pack_array=($(jq -r '.[].packagedComponentId' /c/Users/selva/Downloads/data.json))
+
+#final_array=()
+
+for packagedComponentId  in "${pack_array[@]}"; do
+    output=""
+    for value in "${my_array[@]}"; do
+	#echo "$packagedComponentId"
+	#echo "and"
+	#echo "$value"
+	if [ "$packagedComponentId" == "$value" ]; then
+	    output="value found"
+	    break
+        fi
+    done
+    if [ "$output" != "value found" ]; then
+	    echo "$packagedComponentId"
+	    echo "not deployed"
+    fi
+done
