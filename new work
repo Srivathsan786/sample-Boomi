@@ -1,0 +1,18 @@
+#final_array=()
+
+for packagedComponentId in "${pack_array[@]}"; do
+    output=""
+    for value in "${my_array[@]}"; do
+        #echo "$packagedComponentId"
+        #echo "and"
+        #echo "$value"
+        if [ "$packagedComponentId" == "$value" ]; then
+            output="value found"
+            break
+        fi
+    done
+    if [ "$output" != "value found" ]; then
+        echo "$packagedComponentId"
+        echo "not deployed"
+    fi
+done
