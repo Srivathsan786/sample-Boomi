@@ -227,6 +227,12 @@ jobs:
           pckg+=$(jq -r '.[].PackagedComponent' Packaged_Component.json)
           echo "$pckg" 
 
-           
+    for filename in "${file_array[@]}"; do
+    if [[ "$pckg" == "$filename" ]]; then
+        echo "$filename is present in PackagedComponent IDs."
+    else
+        echo "$filename is not present in PackagedComponent IDs."
+    fi
+done       
           
           
