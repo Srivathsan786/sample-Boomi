@@ -247,3 +247,7 @@ for filename in "${file_array[@]}"; do
     else
         echo "$pckg is not present in the file array."
     fi
+
+
+for pckg_file in $pckg; do
+    found=false
