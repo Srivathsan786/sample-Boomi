@@ -236,3 +236,14 @@ jobs:
 done       
           
           
+for filename in "${file_array[@]}"; do
+        if [[ "$pckg" == "$filename" ]]; then
+            found=true
+            break
+        fi
+    done
+    if $found; then
+        echo "$pckg is present in the file array."
+    else
+        echo "$pckg is not present in the file array."
+    fi
