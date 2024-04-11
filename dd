@@ -270,3 +270,23 @@ for packagedComponentId in "${pack_array[@]}"; do
         echo "$packagedComponentId not deployed"
     fi
 done
+
+
+
+# Assuming $pckg is the value you want to check and $file_array is the array containing values
+found=false
+
+# Iterate over the elements of the array
+for filename in "${file_array[@]}"; do
+    if [[ "$pckg" == "$filename" ]]; then
+        found=true
+        break
+    fi
+done
+
+# Check if the value was found
+if [[ $found == true ]]; then
+    echo "$pckg is present in the file array."
+else
+    echo "$pckg is not present in the file array."
+fi
