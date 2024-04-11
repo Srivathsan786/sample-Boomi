@@ -251,3 +251,22 @@ for filename in "${file_array[@]}"; do
 
 for pckg_file in $pckg; do
     found=false
+
+
+for packagedComponentId in "${pack_array[@]}"; do
+    output="not deployed"  # Initialize output variable
+
+    # Loop through each value in my_array
+    for value in "${File_array[@]}"; do
+        # Compare packagedComponentId with value
+        if [ "$packagedComponentId" == "$value" ]; then
+            output=""  # If match found, clear output
+            break      # Break out of inner loop
+        fi
+    done
+
+    # If output is still "not deployed", print packagedComponentId not deployed
+    if [ -n "$output" ]; then
+        echo "$packagedComponentId not deployed"
+    fi
+done
