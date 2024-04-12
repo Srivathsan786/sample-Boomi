@@ -290,3 +290,17 @@ if [[ $found == true ]]; then
 else
     echo "$pckg is not present in the file array."
 fi
+
+
+
+found=false
+          for packagedComponentId in "${pckg[@]}"; do
+            if [[ "$file_array" == "$packagedComponentId" ]]; then
+                found=true
+                break
+            fi
+            if [[ $found == true ]]; then
+              echo "$pckg is present in the file array."
+            else
+              echo "$pckg is not present in the file array."
+            fi
