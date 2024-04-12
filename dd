@@ -304,3 +304,18 @@ found=false
             else
               echo "$pckg is not present in the file array."
             fi
+
+
+match_found=false
+          for file in "${file_array[@]}"; do
+            for component in $pckg; do
+              if [ "$file" == "$component" ]; then
+                echo "Match found: $component"
+                match_found=true
+              fi
+            done
+          done
+          
+          if [ "$match_found" == false ]; then
+            echo "No value found"
+          fi
