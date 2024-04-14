@@ -369,3 +369,9 @@ found_values=()  # New array to store found values
               fi
             done
           done
+
+
+echo "Found values:"
+          for value in "${found_values[@]}"; do
+            echo "$value"
+          done
