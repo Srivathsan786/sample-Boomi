@@ -509,3 +509,20 @@ echo "Same value files found in UpdateExtensions directory:"
               echo  # Add newline for readability
             done
           done
+
+
+# Define the new values
+new_proview_url="https://new-url.com"
+new_github_secret="new_secret_value"
+
+# Iterate over each found JSON file
+for found_file in "${found_files[@]}"; do
+    # Use jq to update the JSON file
+    jq --arg new_proview_url "$new_proview_url" --arg new_github_secret "$new_github_secret" '
+        .connections.connection[] |= (
+            if .field[].id == "url" then .field[].value = $new_proview_url else . end
+        ) | (
+            if .field[].id == "password" then .field[].value = $new_github_secret else . end
+        )
+    ' "$found_file" > temp.json && mv temp.json "$found_file"
+done
