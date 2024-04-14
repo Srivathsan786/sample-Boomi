@@ -489,3 +489,23 @@ if [ -f "/home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-
               echo "File ${found_value}.json not found."
             fi
           done
+
+
+echo "Same value files found in UpdateExtensions directory:"
+          for found_value in "${found_values[@]}"; do
+            found_files=$(find /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/ -name "${found_value}.json")
+            for file_path in $found_files; do
+              echo "File: $file_path"
+            done
+          done
+
+          # Open the contents of each found value file
+          echo "Opening contents of each found value file:"
+          for found_value in "${found_values[@]}"; do
+            found_files=$(find /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/ -name "${found_value}.json")
+            for file_path in $found_files; do
+              echo "Contents of file: $file_path"
+              cat "$file_path"  # Display contents of the file
+              echo  # Add newline for readability
+            done
+          done
