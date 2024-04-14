@@ -385,3 +385,72 @@ echo "Comparing found values with files in UpdateExtensions directory:"
               echo "File ${found_value}.json not found."
             fi
           done
+
+
+
+
+{
+	"@type": "EnvironmentExtensions",
+    "processProperties": {
+        "@type": "OverrideProcessProperties",
+        "ProcessProperty": [
+            {
+                "@type": "OverrideProcessProperty",
+                "ProcessPropertyValue": [
+                    {
+                        "@type": "ProcessPropertyValue",
+                        "key": "20eae6e4-57f4-47c8-b861-bf60ee85621c",
+                        "value": "Partialupdates6"
+                    },
+                    {
+                        "@type": "ProcessPropertyValue",
+                        "key": "20eae6e4-57f4-47c8-b861-bf60ee85621c",
+                        "value": "Partialupdates7"
+                    },
+                    {
+                        "@type": "ProcessPropertyValue",
+                        "key": "20eae6e4-57f4-47c8-b861-bf60ee85621c",
+                        "value": "Partialupdates8"
+                    }
+                ],
+                "id": "5da53fa0-5e19-40df-99f7-5a54f2148c90",
+                "name": "JWT OLC CREATE"
+            }
+        ]
+    },
+    "connections": {
+        "@type": "Connections",
+        "connection": [
+            {
+                "@type": "Connection",
+                "field": [
+                    {
+                        "@type": "Field",
+                        "id": "url",
+                        "encryptedValueSet": false,
+                        "usesEncryption": false,
+                        "value": "${GITHUB_Proview_URL}"
+                    },
+                    {
+                        "@type": "Field",
+                        "id": "password",
+                        "encryptedValueSet": false,
+                        "usesEncryption": false,
+                        "value": "${GITHUB_SECRET}"
+                    }
+                ],
+                "id": "903fbe2f-3e17-437a-9d3f-653f879b8a37",
+                "name": "Proview_Instance_Connection_QA_COMMON"
+            }
+        ]
+    },
+    "properties": {
+        "property": [
+            {
+                "@type": "",
+                "name": "DPP_Sample",
+                "value": "Hello"
+            }
+        ]
+    }
+}
