@@ -454,3 +454,6 @@ echo "Comparing found values with files in UpdateExtensions directory:"
         ]
     }
 }
+
+
+file_path="/home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/${found_value}.json"
