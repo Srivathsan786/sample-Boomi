@@ -357,3 +357,15 @@ jobs:
           if [ "$value_found" == false ]; then 
             echo "No value found"
           fi
+
+
+found_values=()  # New array to store found values
+
+          for file in "${file_array[@]}"; do
+            for component in $pckg; do
+              if [ "$file" == "$component" ]; then
+                echo "value found: $component"
+                found_values+=("$component")  # Append found value to array
+              fi
+            done
+          done
