@@ -319,3 +319,41 @@ match_found=false
           if [ "$match_found" == false ]; then
             echo "No value found"
           fi
+
+
+name: List Files 
+
+on: [push]  
+
+jobs:
+  list-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: List files in a directory 
+        run: |
+          cd /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/
+          file_array=()
+          for file in $(ls | cut -d '.' -f 1); do
+            file_array+=("$file")
+          done
+            echo "Filenames in an array:"
+            echo "${file_array[@]}"
+          cd /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/Deploy/
+          echo "Deploy Packaged Component Id"
+          cat Packaged_Component.json
+          pckg+=$(jq -r '.[].packagedComponentId' Packaged_Component.json)
+           
+
+          value_found=false
+          for file in "${file_array[@]}"; do
+            for component in $pckg; do
+              if [ "$file" == "$component" ]; then
+                 echo "value found: $component"
+                 value_found=true
+              fi
+             done
+          if [ "$value_found" == false ]; then 
+            echo "No value found"
+          fi
