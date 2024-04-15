@@ -545,17 +545,17 @@ for found_file in "${found_files[@]}"; do
 done
 
 
-echo "Define the new values:"
-          GITHUB_Proview_URL="MYGIT_VARIABLE_SAMPLE"
-          GITHUB_SECRET="GIT_SECRET"
+  echo "Define the new values:"
+GITHUB_Proview_URL="MYGIT_VARIABLE_SAMPLE"
+GITHUB_SECRET="GIT_SECRET"
 
-          echo "Iterate over each found JSON file:"
-          for found_file in "${found_files[@]}"; do
-              jq --arg GITHUB_Proview_URL "$GITHUB_Proview_URL" --arg GITHUB_SECRET "$GITHUB_SECRET" '
-                  .connections.connection[] |= (
-                      if .field[].id == "MYGIT_VARIABLE_SAMPLE" then .field[].value = $GITHUB_Proview_URL else . end
-              ) | (
-                      if .field[].id == "GIT_SECRET" then .field[].value = $GITHUB_SECRET else . end
-              )
-              ' "$found_file" > temp.json && mv temp.json "$found_file"
-          done
+echo "Iterate over each found JSON file:"
+for found_file in "${found_files[@]}"; do
+    jq --arg GITHUB_Proview_URL "$GITHUB_Proview_URL" --arg GITHUB_SECRET "$GITHUB_SECRET" '
+        .connections.connection[] |= (
+            if .field[].id == "url" then .field[].value = $GITHUB_Proview_URL else . end
+        ) | (
+            if .field[].id == "password" then .field[].value = $GITHUB_SECRET else . end
+        )
+    ' "$found_file" > temp.json && mv temp.json "$found_file"
+done
