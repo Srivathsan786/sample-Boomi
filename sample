@@ -108,3 +108,73 @@ jobs:
         ]
     }
 }
+
+
+name: List Files 
+
+on: [push]  
+
+jobs:
+  list-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: List files in a directory 
+        run: | 
+          cd /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/
+          file_array=()
+          for file in $(ls | cut -d '.' -f 1); do
+            file_array+=("$file")
+          done
+            echo "Filenames in an array:"
+            echo "${file_array[@]}"
+          cd /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/Deploy/
+          echo "Deploy Packaged Component Id"
+          cat Packaged_Component.json
+          pckg+=$(jq -r '.[].packagedComponentId' Packaged_Component.json)
+           
+          found_values=() 
+
+          for file in "${file_array[@]}"; do
+            for component in $pckg; do
+              if [ "$file" == "$component" ]; then
+                found_values+=("$component")
+              fi
+            done
+          done
+          echo "Found values:"
+          echo "${found_values[@]}"
+
+          echo "Same value files found in UpdateExtensions directory:"
+          for found_value in "${found_values[@]}"; do
+            found_files=$(find /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/ -name "${found_value}.json" -exec basename {} \;)
+            for file_name in $found_files; do
+              echo "$file_name"
+            done
+          done
+
+          echo "Opening contents of each found value file:"
+          for found_value in "${found_values[@]}"; do
+            found_files=$(find /home/runner/work/aiid205223-sample-Boomi-CICD/aiid205223-sample-Boomi-CICD/JAN2024CE/QA/UpdateExtensions/ -name "${found_value}.json")
+            for file_path in $found_files; do
+              echo "$found_value.json"
+              cat "$file_path"
+              echo  # Add newline for readability
+            done
+          done 
+
+          echo "Define the new values:"
+          GITHUB_Proview_URL=${{ var.URL }}
+          GITHUB_SECRET=${{ secrets.NPM_TOKEN }}
+
+          echo "Iterate over each found JSON file:"
+          for found_file in "${found_files[@]}"; do
+              jq --arg GITHUB_Proview_URL "$GITHUB_Proview_URL" --arg GITHUB_SECRET "$GITHUB_SECRET" '
+                  .connections.connection[] |= (
+                       if .field[].id == "url" then .field[].value = $GITHUB_Proview_URL else . end
+              ) | (
+                       if .field[].id == "password" then .field[].value = $GITHUB_SECRET else . end
+              )
+              ' "$found_file" > temp.json && mv temp.json "$found_file"
+           done
